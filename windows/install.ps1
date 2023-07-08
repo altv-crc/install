@@ -3,11 +3,22 @@ function CommandExists($cmdname) {
     return [bool](Get-Command -Name $cmdname -ErrorAction SilentlyContinue)
 }
 
+# Check if MongoDB is installed
+$connectionTest = Test-NetConnection -ComputerName "localhost" -Port 27017
+if ($connectionTest.TcpTestSucceeded) {
+    Write-Host "MongoDB is intalled."
+} else {
+    Write-Host "MongoDB may not be running or installed. Did you install it as a service?"
+    Write-Host "Try downloading, and installing again."
+    Write-Host "https://fastdl.mongodb.org/windows/mongodb-windows-x86_64-6.0.7-signed.msi"
+}
+
 # Check if Node.js is installed
 if (CommandExists('node')) {
     Write-Host "Node.js is installed."
 } else {
-    Write-Host "Node.js is not installed. Please install Node.js and try again."
+    Write-Host "Node.js is not installed. Download it, and install it."
+    Write-Host "https://nodejs.org/en/download"
     exit
 }
 
@@ -15,7 +26,8 @@ if (CommandExists('node')) {
 if (CommandExists('git')) {
     Write-Host "Git is installed."
 } else {
-    Write-Host "Git is not installed. Please install Git and try again."
+    Write-Host "GIT is not installed. Download it, and install it."
+    Write-Host "https://git-scm.com/downloads"
     exit
 }
 
