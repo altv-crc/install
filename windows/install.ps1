@@ -3,16 +3,6 @@ function CommandExists($cmdname) {
     return [bool](Get-Command -Name $cmdname -ErrorAction SilentlyContinue)
 }
 
-# Check if MongoDB is installed
-$connectionTest = Test-NetConnection -ComputerName "localhost" -Port 27017
-if ($connectionTest.TcpTestSucceeded) {
-    Write-Host "MongoDB is intalled."
-} else {
-    Write-Host "MongoDB may not be running or installed. Did you install it as a service?"
-    Write-Host "Try downloading, and installing again."
-    Write-Host "https://fastdl.mongodb.org/windows/mongodb-windows-x86_64-6.0.7-signed.msi"
-}
-
 # Check if Node.js is installed
 if (CommandExists('node')) {
     Write-Host "Node.js is installed."
@@ -44,6 +34,9 @@ $srcDestinationPath = Join-Path -Path $currentDirectory -ChildPath $srcPath
 git clone -q "https://github.com/altv-crc/altv-crc-core" $coreDestinationPath
 
 Set-Location -Path $srcDestinationPath
+
+$serverTomlPath = Join-Path -Path $coreDestinationPath -ChildPath "server.toml"
+Invoke-WebRequest -Uri "https://raw.githubusercontent.com/altv-crc/install/main/server.toml" -OutFile $serverTomlPath
 
 Write-Host "Cloning repositories..."
 
